@@ -1,17 +1,9 @@
-import { Stack, TextInput } from "@mantine/core";
+"use client";
+
+import { Form } from "./components/form";
 
 const LoginView: React.FC = () => {
-  return (
-    <Stack align="center" justify="center" gap="md">
-      <TextInput label="Email" placeholder="Digite seu email" required />
-      <TextInput
-        label="Senha"
-        placeholder="Digite sua senha"
-        type="password"
-        required
-      />
-    </Stack>
-  );
+  return <Form />;
 };
 
 export default LoginView;

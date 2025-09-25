@@ -1,7 +1,10 @@
+"use client";
+
 import { useCallback, useState } from "react";
 
 import { User as AuthUser, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { getFirebaseAuthErrorMessage } from "@/app/utils/messages-login";
 
 export const useAuth = () => {
   // State to hold the authenticated user
@@ -11,9 +14,8 @@ export const useAuth = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  function handleError(err: unknown, customMessage: string) {
-    setError(customMessage);
-    console.error(err);
+  function handleError(err: string) {
+    setError(err);
     setLoading(false);
   }
 
@@ -29,8 +31,15 @@ export const useAuth = () => {
       );
       setUser(userCredential.user);
       setLoading(false);
+      console.log("User logged in:", userCredential.user);
     } catch (error) {
-      handleError(error, "Failed to login");
+      if (error instanceof Error && "code" in error) {
+        const code = (error as { code: string }).code;
+        const message = getFirebaseAuthErrorMessage(code);
+        handleError(message);
+      } else {
+        handleError("Erro inesperado. Tente novamente mais tarde.");
+      }
     }
   }, []);
 
