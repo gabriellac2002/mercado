@@ -21,18 +21,11 @@ export const useUsers = () => {
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
 
-  // Função para carregar usuários
   const loadUsers = useCallback(async () => {
     try {
       const result = await getUsers();
       if (result.success && result.data) {
         setUsers(result.data);
-      } else {
-        notifications.show({
-          title: "Erro",
-          message: result.error || "Erro ao carregar usuários",
-          color: "red",
-        });
       }
     } catch (error) {
       console.error("Erro ao carregar usuários:", error);
@@ -46,12 +39,10 @@ export const useUsers = () => {
     }
   }, []);
 
-  // Carregar usuários na inicialização
   useEffect(() => {
     loadUsers();
   }, [loadUsers]);
 
-  // Função para criar usuário
   const handleCreateUser = useCallback(
     async (values: UserFormData): Promise<boolean> => {
       setLoading(true);
@@ -69,16 +60,11 @@ export const useUsers = () => {
             message: "Usuário criado com sucesso!",
             color: "green",
           });
-          await loadUsers(); // Recarregar lista
+          await loadUsers();
           return true;
-        } else {
-          notifications.show({
-            title: "Erro",
-            message: result.error || "Erro ao criar usuário",
-            color: "red",
-          });
-          return false;
         }
+
+        return false;
       } catch (error) {
         console.error("Erro ao criar usuário:", error);
         notifications.show({
@@ -94,7 +80,6 @@ export const useUsers = () => {
     [loadUsers]
   );
 
-  // Função para atualizar usuário
   const handleUpdateUser = useCallback(
     async (userId: string, values: UserUpdateData): Promise<boolean> => {
       setLoading(true);
@@ -111,16 +96,10 @@ export const useUsers = () => {
             message: "Usuário atualizado com sucesso!",
             color: "green",
           });
-          await loadUsers(); // Recarregar lista
+          await loadUsers();
           return true;
-        } else {
-          notifications.show({
-            title: "Erro",
-            message: result.error || "Erro ao atualizar usuário",
-            color: "red",
-          });
-          return false;
         }
+        return false;
       } catch (error) {
         console.error("Erro ao atualizar usuário:", error);
         notifications.show({
@@ -136,7 +115,6 @@ export const useUsers = () => {
     [loadUsers]
   );
 
-  // Função para deletar usuário
   const handleDeleteUser = useCallback(
     async (userId: string): Promise<boolean> => {
       setLoading(true);
@@ -148,16 +126,10 @@ export const useUsers = () => {
             message: "Usuário excluído com sucesso!",
             color: "green",
           });
-          await loadUsers(); // Recarregar lista
+          await loadUsers();
           return true;
-        } else {
-          notifications.show({
-            title: "Erro",
-            message: result.error || "Erro ao excluir usuário",
-            color: "red",
-          });
-          return false;
         }
+        return false;
       } catch (error) {
         console.error("Erro ao excluir usuário:", error);
         notifications.show({
@@ -173,7 +145,6 @@ export const useUsers = () => {
     [loadUsers]
   );
 
-  // Função para buscar usuário por ID
   const getUserById = useCallback(
     (userId: string): User | undefined => {
       return users.find((user) => user.id === userId);
@@ -181,7 +152,6 @@ export const useUsers = () => {
     [users]
   );
 
-  // Função para refrescar a lista
   const refreshUsers = useCallback(() => {
     return loadUsers();
   }, [loadUsers]);

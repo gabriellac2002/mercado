@@ -93,7 +93,7 @@ export async function GET() {
   try {
     const usersQuery = query(
       collection(db, "users"),
-      //where("deleted", "!=", true),
+      where("deleted", "!=", true),
       orderBy("createdAt", "desc")
     );
     const querySnapshot = await getDocs(usersQuery);

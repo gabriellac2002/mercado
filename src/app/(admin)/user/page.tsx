@@ -22,7 +22,6 @@ export const UserPage: React.FC = () => {
     useDisclosure(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  // Usar o hook useUsers para toda a lógica de CRUD
   const {
     users,
     loading,
