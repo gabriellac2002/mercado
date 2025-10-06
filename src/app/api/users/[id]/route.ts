@@ -8,7 +8,6 @@ interface RouteParams {
   };
 }
 
-// GET - Buscar um usuário específico
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = params;
@@ -39,14 +38,12 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-// PUT - Atualizar usuário
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = params;
     const body = await request.json();
     const { name, email, role } = body;
 
-    // Verificar se o usuário existe
     const userDoc = await getDoc(doc(db, "users", id));
 
     if (!userDoc.exists()) {
@@ -56,7 +53,6 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Validações
     if (!name || !email || !role) {
       return NextResponse.json(
         { error: "Nome, email e função são obrigatórios" },
@@ -68,7 +64,6 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: "Função inválida" }, { status: 400 });
     }
 
-    // Atualizar dados do usuário
     await updateDoc(doc(db, "users", id), {
       name,
       email,
@@ -76,7 +71,6 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       updatedAt: serverTimestamp(),
     });
 
-    // Buscar dados atualizados
     const updatedUserDoc = await getDoc(doc(db, "users", id));
     const updatedUserData = {
       id: updatedUserDoc.id,
@@ -101,12 +95,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-// DELETE - Excluir usuário
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = params;
 
-    // Verificar se o usuário existe
     const userDoc = await getDoc(doc(db, "users", id));
 
     if (!userDoc.exists() || userDoc.data()?.deleted === true) {
@@ -116,8 +108,8 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Marcar usuário como deletado (soft delete)
     await updateDoc(doc(db, "users", id), {
+      deleted: true,
       deletedAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });

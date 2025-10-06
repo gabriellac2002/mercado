@@ -18,6 +18,7 @@ export interface User {
   role: "admin" | "user";
   createdAt: string;
   updatedAt: string;
+  deleted: boolean;
 }
 
 export interface ApiResponse<T = unknown> {
@@ -156,7 +157,6 @@ export async function updateUser(
   }
 }
 
-// DELETE - Excluir usuário
 export async function deleteUser(id: string): Promise<ApiResponse> {
   try {
     const response = await fetch(`/api/users/${id}`, {
