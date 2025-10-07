@@ -17,7 +17,7 @@ export interface UserUpdateData {
 }
 
 export const useUsers = () => {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<User[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
 
@@ -145,13 +145,6 @@ export const useUsers = () => {
     [loadUsers]
   );
 
-  const getUserById = useCallback(
-    (userId: string): User | undefined => {
-      return users.find((user) => user.id === userId);
-    },
-    [users]
-  );
-
   const refreshUsers = useCallback(() => {
     return loadUsers();
   }, [loadUsers]);
@@ -170,11 +163,5 @@ export const useUsers = () => {
     // Funções utilitárias
     loadUsers,
     refreshUsers,
-    getUserById,
-
-    // Computed values
-    totalUsers: users.length,
-    adminUsers: users.filter((user) => user.role === "admin").length,
-    regularUsers: users.filter((user) => user.role === "user").length,
   };
 };

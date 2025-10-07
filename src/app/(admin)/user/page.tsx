@@ -9,6 +9,7 @@ import {
   Stack,
   Modal,
   Text,
+  Loader,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
@@ -67,6 +68,14 @@ export const UserPage: React.FC = () => {
       setSelectedUser(null);
     }
   };
+
+  if (loading || !users) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <Container size="xl" py="md">
