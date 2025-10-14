@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Button,
-  TextInput,
-  Select,
-  PasswordInput,
-  Stack,
-  Group,
-} from "@mantine/core";
+import { Button, TextInput, Select, Stack, Group } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconDeviceFloppy, IconX } from "@tabler/icons-react";
@@ -17,7 +10,6 @@ export interface UserFormData {
   name: string;
   email: string;
   role: "admin" | "user";
-  password: string;
 }
 
 interface UserFormProps {
@@ -40,12 +32,10 @@ export const UserForm: React.FC<UserFormProps> = ({
       name: initialData?.name || "",
       email: initialData?.email || "",
       role: initialData?.role || "user",
-      password: "",
     },
     validate: {
       name: isNotEmpty("Nome é obrigatório"),
       email: isNotEmpty("Email é obrigatório"),
-      password: !isEdit ? isNotEmpty("Senha é obrigatória") : undefined,
     },
   });
 
@@ -99,15 +89,6 @@ export const UserForm: React.FC<UserFormProps> = ({
           ]}
           {...form.getInputProps("role")}
         />
-
-        {!isEdit && (
-          <PasswordInput
-            label="Senha"
-            placeholder="Digite a senha"
-            required
-            {...form.getInputProps("password")}
-          />
-        )}
 
         <Group gap="sm" mt="auto" justify="flex-end">
           <Button

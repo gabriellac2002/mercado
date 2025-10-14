@@ -1,3 +1,5 @@
+import { User } from "@/app/types/user";
+
 export interface CreateUserData {
   name: string;
   email: string;
@@ -9,16 +11,6 @@ export interface UpdateUserData {
   name: string;
   email: string;
   role: "admin" | "user";
-}
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: "admin" | "user";
-  createdAt: string;
-  updatedAt: string;
-  deleted: boolean;
 }
 
 export interface ApiResponse<T = unknown> {

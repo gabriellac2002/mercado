@@ -27,7 +27,7 @@ export const UserPage: React.FC = () => {
     users,
     loading,
     handleCreateUser,
-    handleUpdateUser,
+    // handleUpdateUser,
     handleDeleteUser,
   } = useUsers();
 
@@ -44,20 +44,20 @@ export const UserPage: React.FC = () => {
     open();
   };
 
-  const handleUpdateUserSubmit = async (values: UserFormData) => {
-    if (!selectedUser) return;
+  // const handleUpdateUserSubmit = async (values: UserFormData) => {
+  //   if (!selectedUser) return;
 
-    const success = await handleUpdateUser(selectedUser.id, {
-      name: values.name,
-      email: values.email,
-      role: values.role,
-    });
+  //   const success = await handleUpdateUser(selectedUser.id, {
+  //     name: values.name,
+  //     email: values.email,
+  //     role: values.role,
+  //   });
 
-    if (success) {
-      close();
-      setSelectedUser(null);
-    }
-  };
+  //   if (success) {
+  //     close();
+  //     setSelectedUser(null);
+  //   }
+  // };
 
   const handleDeleteUserConfirm = async () => {
     if (!selectedUser) return;
@@ -112,7 +112,7 @@ export const UserPage: React.FC = () => {
           close();
           setSelectedUser(null);
         }}
-        onSubmit={selectedUser ? handleUpdateUserSubmit : handleAddUser}
+        onSubmit={handleAddUser}
         loading={loading}
         initialData={selectedUser || undefined}
         isEdit={!!selectedUser}

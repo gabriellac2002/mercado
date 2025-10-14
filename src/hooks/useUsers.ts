@@ -1,20 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { notifications } from "@mantine/notifications";
-import { createUser, getUsers, updateUser, deleteUser } from "@/lib/api/user";
+import { getUsers } from "@/lib/api/user";
+import {
+  createUserAction,
+  updateUserAction,
+  deleteUserAction,
+} from "@/app/(admin)/user/actions/user-actions";
 import { User } from "@/app/types/user";
 
-export interface UserFormData {
-  name: string;
-  email: string;
-  password: string;
-  role: "admin" | "user";
-}
-
-export interface UserUpdateData {
-  name: string;
-  email: string;
-  role: "admin" | "user";
-}
+export type UserFormData = Pick<User, "name" | "email" | "role">;
 
 export const useUsers = () => {
   const [users, setUsers] = useState<User[] | null>(null);
@@ -46,18 +40,18 @@ export const useUsers = () => {
   const handleCreateUser = useCallback(
     async (values: UserFormData): Promise<boolean> => {
       setLoading(true);
+
       try {
-        const result = await createUser({
+        const result = await createUserAction({
           name: values.name,
           email: values.email,
-          password: values.password,
           role: values.role,
         });
 
         if (result.success) {
           notifications.show({
             title: "Sucesso",
-            message: "Usuário criado com sucesso!",
+            message: result.data?.message || "Usuário criado com sucesso!",
             color: "green",
           });
           await loadUsers();
@@ -80,46 +74,46 @@ export const useUsers = () => {
     [loadUsers]
   );
 
-  const handleUpdateUser = useCallback(
-    async (userId: string, values: UserUpdateData): Promise<boolean> => {
-      setLoading(true);
-      try {
-        const result = await updateUser(userId, {
-          name: values.name,
-          email: values.email,
-          role: values.role,
-        });
+  // const handleUpdateUser = useCallback(
+  //   async (userId: string, values: UserFormData): Promise<boolean> => {
+  //     setLoading(true);
+  //     try {
+  //       const result = await updateUserAction(userId, {
+  //         name: values.name,
+  //         email: values.email,
+  //         role: values.role,
+  //       });
 
-        if (result.success) {
-          notifications.show({
-            title: "Sucesso",
-            message: "Usuário atualizado com sucesso!",
-            color: "green",
-          });
-          await loadUsers();
-          return true;
-        }
-        return false;
-      } catch (error) {
-        console.error("Erro ao atualizar usuário:", error);
-        notifications.show({
-          title: "Erro",
-          message: "Erro inesperado ao atualizar usuário",
-          color: "red",
-        });
-        return false;
-      } finally {
-        setLoading(false);
-      }
-    },
-    [loadUsers]
-  );
+  //       if (result.success) {
+  //         notifications.show({
+  //           title: "Sucesso",
+  //           message: "Usuário atualizado com sucesso!",
+  //           color: "green",
+  //         });
+  //         await loadUsers();
+  //         return true;
+  //       }
+  //       return false;
+  //     } catch (error) {
+  //       console.error("Erro ao atualizar usuário:", error);
+  //       notifications.show({
+  //         title: "Erro",
+  //         message: "Erro inesperado ao atualizar usuário",
+  //         color: "red",
+  //       });
+  //       return false;
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   },
+  //   [loadUsers]
+  // );
 
   const handleDeleteUser = useCallback(
     async (userId: string): Promise<boolean> => {
       setLoading(true);
       try {
-        const result = await deleteUser(userId);
+        const result = await deleteUserAction(userId);
         if (result.success) {
           notifications.show({
             title: "Sucesso",
@@ -157,7 +151,7 @@ export const useUsers = () => {
 
     // Funções de CRUD
     handleCreateUser,
-    handleUpdateUser,
+    //handleUpdateUser,
     handleDeleteUser,
 
     // Funções utilitárias
