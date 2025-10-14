@@ -2,7 +2,7 @@ import type React from "react";
 import Image from "next/image";
 import { IconShoppingCartFilled } from "@tabler/icons-react";
 
-const AuthLayout: React.FC<React.PropsWithChildren> = (props) => {
+export const AuthLayout: React.FC<React.PropsWithChildren> = (props) => {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center relative">
       {/* Fundo da loja */}
@@ -49,5 +49,3 @@ const AuthLayout: React.FC<React.PropsWithChildren> = (props) => {
     </div>
   );
 };
-
-export default AuthLayout;
