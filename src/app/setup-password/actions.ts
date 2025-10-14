@@ -1,9 +1,9 @@
 "use server";
 
-import { db } from "@/lib/firebase";
+import { db, auth } from "@/lib/firebase";
 import { doc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
-import crypto from "crypto";
 import { User } from "../types/user";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 interface ValidateTokenResult {
   success: boolean;
@@ -15,10 +15,6 @@ interface CompletePasswordResult {
   success: boolean;
   message?: string;
   error?: string;
-}
-
-function hashPassword(password: string): string {
-  return crypto.createHash("sha256").update(password).digest("hex");
 }
 
 async function getAndValidateUserDoc(
@@ -81,10 +77,11 @@ export async function completePasswordAction(
     const result = await getAndValidateUserDoc(userId, token);
     if ("error" in result) return { success: false, error: result.error };
 
-    const hashedPassword = hashPassword(password);
+    const userData = result.userData;
+
+    await createUserWithEmailAndPassword(auth, userData.email, password);
 
     await updateDoc(doc(db, "users", userId), {
-      password: hashedPassword,
       passwordSet: true,
       passwordToken: null,
       tokenExpiry: null,
