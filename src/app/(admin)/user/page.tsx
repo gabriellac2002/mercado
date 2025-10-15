@@ -13,9 +13,11 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
-import { UserTable, UserDrawer, type UserFormData } from "./components";
+import { UserTable, UserDrawer } from "./components";
 import { useUsers } from "@/hooks/useUsers";
 import { User } from "@/app/types/user";
+
+type UserFormData = Pick<User, "name" | "email" | "role">;
 
 export const UserPage: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -27,11 +29,11 @@ export const UserPage: React.FC = () => {
     users,
     loading,
     handleCreateUser,
-    // handleUpdateUser,
     handleDeleteUser,
+    handleUpdateUser,
   } = useUsers();
 
-  const handleAddUser = async (values: UserFormData) => {
+  const handleAdd = async (values: UserFormData) => {
     const success = await handleCreateUser(values);
     if (success) {
       close();
@@ -39,25 +41,21 @@ export const UserPage: React.FC = () => {
     }
   };
 
-  const handleEditUser = (user: User) => {
+  const handleEdit = (user: User) => {
     setSelectedUser(user);
     open();
   };
 
-  // const handleUpdateUserSubmit = async (values: UserFormData) => {
-  //   if (!selectedUser) return;
+  const handleUpdate = async (value: User) => {
+    if (!selectedUser) return;
 
-  //   const success = await handleUpdateUser(selectedUser.id, {
-  //     name: values.name,
-  //     email: values.email,
-  //     role: values.role,
-  //   });
+    const success = await handleUpdateUser(selectedUser.id, value);
 
-  //   if (success) {
-  //     close();
-  //     setSelectedUser(null);
-  //   }
-  // };
+    if (success) {
+      close();
+      setSelectedUser(null);
+    }
+  };
 
   const handleDeleteUserConfirm = async () => {
     if (!selectedUser) return;
@@ -95,7 +93,7 @@ export const UserPage: React.FC = () => {
 
         <UserTable
           users={users}
-          onEdit={handleEditUser}
+          onEdit={handleEdit}
           onDelete={(userId: string) => {
             const user = users.find((u) => u.id === userId);
             if (user) {
@@ -112,7 +110,7 @@ export const UserPage: React.FC = () => {
           close();
           setSelectedUser(null);
         }}
-        onSubmit={handleAddUser}
+        onSubmit={selectedUser ? handleUpdate : handleAdd}
         loading={loading}
         initialData={selectedUser || undefined}
         isEdit={!!selectedUser}

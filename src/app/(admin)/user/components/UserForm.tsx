@@ -6,14 +6,8 @@ import { notifications } from "@mantine/notifications";
 import { IconDeviceFloppy, IconX } from "@tabler/icons-react";
 import { User } from "@/app/types/user";
 
-export interface UserFormData {
-  name: string;
-  email: string;
-  role: "admin" | "user";
-}
-
 interface UserFormProps {
-  onSubmit: (data: UserFormData) => void;
+  onSubmit: (data: User) => void;
   onCancel: () => void;
   loading?: boolean;
   initialData?: User;
@@ -27,11 +21,19 @@ export const UserForm: React.FC<UserFormProps> = ({
   initialData,
   isEdit = false,
 }) => {
-  const form = useForm<UserFormData>({
+  const form = useForm<User>({
     initialValues: {
+      id: initialData?.id || "",
       name: initialData?.name || "",
       email: initialData?.email || "",
       role: initialData?.role || "user",
+      password: "",
+      passwordSet: initialData?.passwordSet || false,
+      passwordToken: initialData?.passwordToken || "",
+      tokenExpiry: initialData?.tokenExpiry || "",
+      createdAt: initialData?.createdAt || "",
+      updatedAt: initialData?.updatedAt || "",
+      deletedAt: initialData?.deletedAt || null,
     },
     validate: {
       name: isNotEmpty("Nome é obrigatório"),
@@ -39,19 +41,12 @@ export const UserForm: React.FC<UserFormProps> = ({
     },
   });
 
-  const handleSubmit = (values: UserFormData) => {
+  const handleSubmit = (values: User) => {
     try {
       onSubmit(values);
       if (!isEdit) {
         form.reset();
       }
-      notifications.show({
-        title: "Sucesso",
-        message: isEdit
-          ? "Usuário atualizado com sucesso!"
-          : "Usuário criado com sucesso!",
-        color: "green",
-      });
     } catch {
       notifications.show({
         title: "Erro",

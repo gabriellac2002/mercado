@@ -21,6 +21,7 @@
     "@types/nodemailer": "^7.0.2",
     "dayjs": "^1.11.18",
     "firebase": "^12.3.0",
+    "flowbite-react": "^0.12.9",
     "next": "15.5.3",
     "nodemailer": "^7.0.9",
     "react": "19.1.0",

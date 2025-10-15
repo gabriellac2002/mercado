@@ -1,17 +1,9 @@
 import { User } from "@/app/types/user";
 
-export interface CreateUserData {
-  name: string;
-  email: string;
+type CreateUserData = Pick<User, "name" | "email" | "role"> & {
   password: string;
-  role: "admin" | "user";
-}
-
-export interface UpdateUserData {
-  name: string;
-  email: string;
-  role: "admin" | "user";
-}
+};
+type UpdateUserData = Pick<User, "name" | "email" | "role">;
 
 export interface ApiResponse<T = unknown> {
   success: boolean;

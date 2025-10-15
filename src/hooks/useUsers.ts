@@ -74,40 +74,36 @@ export const useUsers = () => {
     [loadUsers]
   );
 
-  // const handleUpdateUser = useCallback(
-  //   async (userId: string, values: UserFormData): Promise<boolean> => {
-  //     setLoading(true);
-  //     try {
-  //       const result = await updateUserAction(userId, {
-  //         name: values.name,
-  //         email: values.email,
-  //         role: values.role,
-  //       });
+  const handleUpdateUser = useCallback(
+    async (userId: string, value: User): Promise<boolean> => {
+      setLoading(true);
+      try {
+        const result = await updateUserAction(userId, value);
 
-  //       if (result.success) {
-  //         notifications.show({
-  //           title: "Sucesso",
-  //           message: "Usuário atualizado com sucesso!",
-  //           color: "green",
-  //         });
-  //         await loadUsers();
-  //         return true;
-  //       }
-  //       return false;
-  //     } catch (error) {
-  //       console.error("Erro ao atualizar usuário:", error);
-  //       notifications.show({
-  //         title: "Erro",
-  //         message: "Erro inesperado ao atualizar usuário",
-  //         color: "red",
-  //       });
-  //       return false;
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   },
-  //   [loadUsers]
-  // );
+        if (result.success) {
+          notifications.show({
+            title: "Sucesso",
+            message: "Usuário atualizado com sucesso!",
+            color: "green",
+          });
+          await loadUsers();
+          return true;
+        }
+        return false;
+      } catch (error) {
+        console.error("Erro ao atualizar usuário:", error);
+        notifications.show({
+          title: "Erro",
+          message: "Erro inesperado ao atualizar usuário",
+          color: "red",
+        });
+        return false;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [loadUsers]
+  );
 
   const handleDeleteUser = useCallback(
     async (userId: string): Promise<boolean> => {
@@ -151,7 +147,7 @@ export const useUsers = () => {
 
     // Funções de CRUD
     handleCreateUser,
-    //handleUpdateUser,
+    handleUpdateUser,
     handleDeleteUser,
 
     // Funções utilitárias

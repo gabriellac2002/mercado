@@ -1,13 +1,13 @@
 "use client";
 
 import { Drawer } from "@mantine/core";
-import { UserForm, type UserFormData } from "./UserForm";
+import { UserForm } from "./UserForm";
 import { User } from "@/app/types/user";
 
 interface UserDrawerProps {
   opened: boolean;
   onClose: () => void;
-  onSubmit: (data: UserFormData) => void;
+  onSubmit: (data: User) => void;
   loading?: boolean;
   initialData?: User;
   isEdit?: boolean;
@@ -21,7 +21,7 @@ export const UserDrawer: React.FC<UserDrawerProps> = ({
   initialData,
   isEdit = false,
 }) => {
-  const handleSubmit = (data: UserFormData) => {
+  const handleSubmit = (data: User) => {
     onSubmit(data);
     onClose();
   };
