@@ -26,3 +26,19 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+[data-testid="sidebar"] {
+  background-color: #166534 !important; /* green-800 */
+  color: white !important;
+}
+[data-testid="sidebar"] a {
+  color: white !important;
+}
+[data-testid="sidebar"] a:hover {
+  background-color: rgba(
+    22,
+    101,
+    52,
+    0.5
+  ) !important; /* hover verde translúcido */
+}

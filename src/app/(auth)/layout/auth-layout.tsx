@@ -1,6 +1,5 @@
 import type React from "react";
 import Image from "next/image";
-import { IconShoppingCartFilled } from "@tabler/icons-react";
 
 export const AuthLayout: React.FC<React.PropsWithChildren> = (props) => {
   return (
@@ -22,11 +21,21 @@ export const AuthLayout: React.FC<React.PropsWithChildren> = (props) => {
           <div className="flex flex-col items-center gap-6 w-full">
             <div className="relative">
               <div className="absolute inset-0 bg-green-100 rounded-full blur-xl opacity-50"></div>
-              <IconShoppingCartFilled
-                size={80}
-                className="relative z-10 text-emerald-700"
-                stroke={1.5}
-              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#16a34a"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="8" cy="21" r="1" />
+                <circle cx="19" cy="21" r="1" />
+                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+              </svg>
             </div>
 
             <div className="text-center">

@@ -38,8 +38,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <MantineProvider theme={theme}>
-          <Notifications />
           {children}
+          <Notifications />
         </MantineProvider>
       </body>
     </html>
