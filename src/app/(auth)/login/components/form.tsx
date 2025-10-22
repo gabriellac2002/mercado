@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/auth/useAuth";
 import { Alert, Button, PasswordInput, Stack, TextInput } from "@mantine/core";
 import { hasLength, isNotEmpty, useForm } from "@mantine/form";
 
