@@ -1,7 +1,16 @@
 "use client";
 
 import { User } from "@/app/types/user";
-import { Table, Badge, ActionIcon, Group, Text, Paper } from "@mantine/core";
+import {
+  Table,
+  Badge,
+  ActionIcon,
+  Group,
+  Text,
+  Paper,
+  useMantineTheme,
+} from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 
 interface UserTableProps {
@@ -15,6 +24,9 @@ export const UserTable: React.FC<UserTableProps> = ({
   onEdit,
   onDelete,
 }) => {
+  const theme = useMantineTheme();
+  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
+
   const getRoleBadgeColor = (role: string) => {
     return role === "admin" ? "blue" : "gray";
   };
@@ -35,45 +47,53 @@ export const UserTable: React.FC<UserTableProps> = ({
     <Table.Tr key={user.id}>
       <Table.Td>{user.name}</Table.Td>
       <Table.Td>{user.email}</Table.Td>
-      <Table.Td>
-        <Badge color={getRoleBadgeColor(user.role)} variant="light">
-          {getRoleLabel(user.role)}
-        </Badge>
-      </Table.Td>
-      <Table.Td>
-        <Group gap="xs">
-          {onEdit && (
-            <ActionIcon
-              variant="subtle"
-              color="blue"
-              onClick={() => onEdit(user)}
-            >
-              <IconEdit size={16} />
-            </ActionIcon>
-          )}
-          {onDelete && (
-            <ActionIcon
-              variant="subtle"
-              color="red"
-              onClick={() => onDelete(user.id)}
-            >
-              <IconTrash size={16} />
-            </ActionIcon>
-          )}
-        </Group>
-      </Table.Td>
+      {!isMobile && (
+        <>
+          <Table.Td>
+            <Badge color={getRoleBadgeColor(user.role)} variant="light">
+              {getRoleLabel(user.role)}
+            </Badge>
+          </Table.Td>
+          <Table.Td>
+            <Group gap="xs">
+              {onEdit && (
+                <ActionIcon
+                  variant="subtle"
+                  color="blue"
+                  onClick={() => onEdit(user)}
+                >
+                  <IconEdit size={16} />
+                </ActionIcon>
+              )}
+              {onDelete && (
+                <ActionIcon
+                  variant="subtle"
+                  color="red"
+                  onClick={() => onDelete(user.id)}
+                >
+                  <IconTrash size={16} />
+                </ActionIcon>
+              )}
+            </Group>
+          </Table.Td>
+        </>
+      )}
     </Table.Tr>
   ));
 
   return (
-    <Paper withBorder>
+    <Paper withBorder className="w-full">
       <Table>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Nome</Table.Th>
             <Table.Th>Email</Table.Th>
-            <Table.Th>Função</Table.Th>
-            <Table.Th>Ações</Table.Th>
+            {!isMobile && (
+              <>
+                <Table.Th>Função</Table.Th>
+                <Table.Th>Ações</Table.Th>
+              </>
+            )}
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>

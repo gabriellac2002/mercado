@@ -76,7 +76,7 @@ export const UserPage: React.FC = () => {
   }
 
   return (
-    <Container size="xl" py="md">
+    <Container size="xl" py="md" className="w-full">
       <Stack gap="lg">
         <Group justify="space-between" align="center">
           <Title order={1}>Gerenciamento de Usuários</Title>
