@@ -2,14 +2,16 @@
 
 import { useCallback, useState } from "react";
 
-import { User as AuthUser, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { getFirebaseAuthErrorMessage } from "@/app/utils/messages-login";
 import { useRouter } from "next/navigation";
+import useUserStore from "@/Store/user-store";
+import { getUserFromFirebase } from "./utils";
 
 export const useAuth = () => {
   // State to hold the authenticated user
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const { setUser } = useUserStore();
 
   //Loadings states
   const [loading, setLoading] = useState(false);
@@ -33,7 +35,14 @@ export const useAuth = () => {
           email,
           password
         );
-        setUser(userCredential.user);
+        const firebaseUser = userCredential.user;
+        const userDoc = await getUserFromFirebase(firebaseUser.uid);
+
+        if (!userDoc) {
+          throw new Error("Usuário não encontrado no banco de dados.");
+        }
+
+        setUser(userDoc);
         setLoading(false);
         router.push("/user");
       } catch (error) {
@@ -46,8 +55,8 @@ export const useAuth = () => {
         }
       }
     },
-    [router]
+    [router, setUser]
   );
 
-  return { user, loading, error, handleLogin };
+  return { loading, error, handleLogin };
 };
