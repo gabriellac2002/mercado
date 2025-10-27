@@ -35,7 +35,11 @@ export const ProductTable: React.FC<ProductTableProps> = ({
     );
   }
 
-  const rows = products.map((p) => (
+  const orderedProducts = [...products].sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
+
+  const rows = orderedProducts.map((p) => (
     <Table.Tr key={p.id}>
       <Table.Td>{p.name}</Table.Td>
       <Table.Td>

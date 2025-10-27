@@ -20,6 +20,7 @@ export async function createProductAction(
   data?: { id: string; message: string };
   error?: string;
 }> {
+  console.log("Creating product with data:", ProductData);
   try {
     // Criar produto no Firestore
     const productRef = await addDoc(collection(db, "products"), {
@@ -29,6 +30,8 @@ export async function createProductAction(
       supplier: ProductData.supplier,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
+      deleted: false,
+      deletedAt: null,
     });
 
     return {
