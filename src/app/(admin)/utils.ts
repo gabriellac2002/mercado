@@ -1,4 +1,5 @@
-import { FaUsers } from "react-icons/fa";
+import { FaUsers, FaShoppingCart } from "react-icons/fa";
+import { TbFileUpload } from "react-icons/tb";
 import { IconType } from "react-icons";
 
 export interface SidebarRoute {
@@ -9,8 +10,18 @@ export interface SidebarRoute {
 
 export const sidebarRoutes: SidebarRoute[] = [
   {
-    path: "/(admin)/user",
+    path: "/user",
     name: "Usuarios",
     icon: FaUsers,
+  },
+  {
+    path: "/products",
+    name: "Produtos",
+    icon: FaShoppingCart,
+  },
+  {
+    path: "/upload",
+    name: "Upload",
+    icon: TbFileUpload,
   },
 ];
