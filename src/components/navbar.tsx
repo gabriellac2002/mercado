@@ -72,10 +72,10 @@ export const Navbar: React.FC<NavbarProps> = ({ collapsed }) => {
                 styles={{
                   root: {
                     color: "white",
+                    hover: { color: "green" },
                     fontWeight: 500,
-                    "&:hover": { backgroundColor: "rgba(255,255,255,0.1)" },
                   },
-                  label: { color: "white" },
+                  label: { color: "white", hover: { color: "green" } },
                 }}
               />
             )

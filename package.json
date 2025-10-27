@@ -11,6 +11,7 @@
   "dependencies": {
     "@mantine/core": "^8.3.1",
     "@mantine/dates": "^8.3.1",
+    "@mantine/dropzone": "^8.3.5",
     "@mantine/form": "^8.3.1",
     "@mantine/hooks": "^8.3.1",
     "@mantine/modals": "^8.3.1",
@@ -20,6 +21,7 @@
     "@tabler/icons-react": "^3.35.0",
     "@types/nodemailer": "^7.0.2",
     "dayjs": "^1.11.18",
+    "fast-xml-parser": "^5.3.0",
     "firebase": "^12.3.0",
     "firebase-admin": "^13.5.0",
     "flowbite-react": "^0.12.9",
