@@ -1,6 +1,6 @@
 "use client";
 
-import { Container, Loader, Paper, Stack, Title } from "@mantine/core";
+import { Container, Loader, Paper, Title } from "@mantine/core";
 import { UploadDropzone } from "./components/dropzone";
 import { useState } from "react";
 import { processXmlNfe } from "./actions/producs-actions";
@@ -42,21 +42,19 @@ export const UploadPage: React.FC = () => {
   }
 
   return (
-    <Container size="xl" py="md" className="w-full">
-      <Stack gap="lg">
-        <Title order={1}>Upload de Produtos</Title>
-        {importedProducts ? (
-          <CardProducts
-            importedProducts={importedProducts}
-            onReject={() => setImportedProducts(null)}
-          />
-        ) : (
-          <Paper p="md" withBorder>
-            <UploadDropzone onDrop={handleFileUpload} loading={loading} />
-          </Paper>
-        )}
-      </Stack>
-    </Container>
+    <>
+      <Title order={1}>Upload de Produtos</Title>
+      {importedProducts ? (
+        <CardProducts
+          importedProducts={importedProducts}
+          onReject={() => setImportedProducts(null)}
+        />
+      ) : (
+        <Paper p="md" withBorder>
+          <UploadDropzone onDrop={handleFileUpload} loading={loading} />
+        </Paper>
+      )}
+    </>
   );
 };
 

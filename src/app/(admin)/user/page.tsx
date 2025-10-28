@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Container, Title, Button, Group, Stack, Loader } from "@mantine/core";
+import { Title, Button, Group, Loader } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
 import { UserTable, UserDrawer } from "./components";
@@ -68,33 +68,31 @@ export const UserPage: React.FC = () => {
   }
 
   return (
-    <Container size="xl" py="md" className="w-full">
-      <Stack gap="lg">
-        <Group justify="space-between" align="center">
-          <Title order={1}>Gerenciamento de Usuários</Title>
-          <Button
-            leftSection={<IconPlus size={16} />}
-            onClick={() => {
-              setSelectedUser(null);
-              open();
-            }}
-          >
-            Adicionar Usuário
-          </Button>
-        </Group>
-
-        <UserTable
-          users={users}
-          onEdit={handleEdit}
-          onDelete={(userId: string) => {
-            const user = users.find((u) => u.id === userId);
-            if (user) {
-              setSelectedUser(user);
-              openModal();
-            }
+    <>
+      <Group justify="space-between" align="center">
+        <Title order={1}>Usuários</Title>
+        <Button
+          leftSection={<IconPlus size={16} />}
+          onClick={() => {
+            setSelectedUser(null);
+            open();
           }}
-        />
-      </Stack>
+        >
+          Adicionar Usuário
+        </Button>
+      </Group>
+
+      <UserTable
+        users={users}
+        onEdit={handleEdit}
+        onDelete={(userId: string) => {
+          const user = users.find((u) => u.id === userId);
+          if (user) {
+            setSelectedUser(user);
+            openModal();
+          }
+        }}
+      />
 
       <UserDrawer
         opened={opened}
@@ -114,7 +112,7 @@ export const UserPage: React.FC = () => {
         handleClick={handleDeleteUserConfirm}
         isDisabled={!selectedUser}
       />
-    </Container>
+    </>
   );
 };
 

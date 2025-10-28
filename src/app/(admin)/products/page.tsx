@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Container, Title, Button, Group, Stack, Loader } from "@mantine/core";
+import { Title, Button, Group, Loader } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
 import { ProductFormData, useProducts } from "./hooks/useProducts";
@@ -67,33 +67,31 @@ export const ProductPage: React.FC = () => {
   }
 
   return (
-    <Container size="xl" py="md" className="w-full">
-      <Stack gap="lg">
-        <Group justify="space-between" align="center">
-          <Title order={1}>Gerenciamento de Produtos</Title>
-          <Button
-            leftSection={<IconPlus size={16} />}
-            onClick={() => {
-              setSelectedProduct(null);
-              open();
-            }}
-          >
-            Adicionar Produto
-          </Button>
-        </Group>
-
-        <ProductTable
-          products={products}
-          onEdit={handleEdit}
-          onDelete={(productId: string) => {
-            const product = products.find((p) => p.id === productId);
-            if (product) {
-              setSelectedProduct(product);
-              openModal();
-            }
+    <>
+      <Group justify="space-between" align="center">
+        <Title order={1}>Gerenciamento de Produtos</Title>
+        <Button
+          leftSection={<IconPlus size={16} />}
+          onClick={() => {
+            setSelectedProduct(null);
+            open();
           }}
-        />
-      </Stack>
+        >
+          Adicionar Produto
+        </Button>
+      </Group>
+
+      <ProductTable
+        products={products}
+        onEdit={handleEdit}
+        onDelete={(productId: string) => {
+          const product = products.find((p) => p.id === productId);
+          if (product) {
+            setSelectedProduct(product);
+            openModal();
+          }
+        }}
+      />
 
       <ProductDrawer
         opened={opened}
@@ -113,7 +111,7 @@ export const ProductPage: React.FC = () => {
         handleClick={handleDeleteProductConfirm}
         isDisabled={!selectedProduct}
       />
-    </Container>
+    </>
   );
 };
 
