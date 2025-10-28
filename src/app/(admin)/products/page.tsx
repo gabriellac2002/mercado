@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Title, Button, Group, Loader } from "@mantine/core";
+import { Button, Loader } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
 import { ProductFormData, useProducts } from "./hooks/useProducts";
@@ -9,6 +9,8 @@ import { Product } from "@/app/types/product";
 import { ProductTable } from "./components/product-table";
 import { ProductDrawer } from "./components/product-drawer";
 import { DeleteModal } from "@/components/delete-modal";
+import { FaShoppingCart } from "react-icons/fa";
+import { PageLayout } from "../layout/page-layout";
 
 export const ProductPage: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -67,20 +69,23 @@ export const ProductPage: React.FC = () => {
   }
 
   return (
-    <>
-      <Group justify="space-between" align="center">
-        <Title order={1}>Gerenciamento de Produtos</Title>
+    <PageLayout
+      title="Produtos"
+      icon={<FaShoppingCart size={24} />}
+      description="Gerencie seus produtos"
+      rightSection={
         <Button
           leftSection={<IconPlus size={16} />}
           onClick={() => {
             setSelectedProduct(null);
             open();
           }}
+          mt="sm"
         >
           Adicionar Produto
         </Button>
-      </Group>
-
+      }
+    >
       <ProductTable
         products={products}
         onEdit={handleEdit}
@@ -111,7 +116,7 @@ export const ProductPage: React.FC = () => {
         handleClick={handleDeleteProductConfirm}
         isDisabled={!selectedProduct}
       />
-    </>
+    </PageLayout>
   );
 };
 

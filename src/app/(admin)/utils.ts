@@ -1,4 +1,4 @@
-import { FaUsers, FaShoppingCart } from "react-icons/fa";
+import { FaUsers, FaShoppingCart, FaTags } from "react-icons/fa";
 import { TbFileUpload } from "react-icons/tb";
 import { IconType } from "react-icons";
 
@@ -18,6 +18,11 @@ export const sidebarRoutes: SidebarRoute[] = [
     path: "/products",
     name: "Produtos",
     icon: FaShoppingCart,
+  },
+  {
+    path: "/category",
+    name: "Categorias",
+    icon: FaTags,
   },
   {
     path: "/upload",

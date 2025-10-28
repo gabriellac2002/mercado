@@ -1,12 +1,14 @@
 "use client";
 
-import { Container, Loader, Paper, Title } from "@mantine/core";
+import { Container, Loader, Paper } from "@mantine/core";
 import { UploadDropzone } from "./components/dropzone";
 import { useState } from "react";
 import { processXmlNfe } from "./actions/producs-actions";
 import { FileWithPath } from "@mantine/dropzone";
 import { ParseResult } from "./actions/types";
 import { CardProducts } from "./components/card_products";
+import { PageLayout } from "../layout/page-layout";
+import { IconUpload } from "@tabler/icons-react";
 
 export const UploadPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -42,8 +44,11 @@ export const UploadPage: React.FC = () => {
   }
 
   return (
-    <>
-      <Title order={1}>Upload de Produtos</Title>
+    <PageLayout
+      title="Upload"
+      icon={<IconUpload size={24} />}
+      description={"Importe produtos via arquivo XML NFe"}
+    >
       {importedProducts ? (
         <CardProducts
           importedProducts={importedProducts}
@@ -54,7 +59,7 @@ export const UploadPage: React.FC = () => {
           <UploadDropzone onDrop={handleFileUpload} loading={loading} />
         </Paper>
       )}
-    </>
+    </PageLayout>
   );
 };
 
