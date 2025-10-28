@@ -1,22 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Container,
-  Title,
-  Button,
-  Group,
-  Stack,
-  Modal,
-  Text,
-  Loader,
-} from "@mantine/core";
+import { Container, Title, Button, Group, Stack, Loader } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
 import { ProductFormData, useProducts } from "./hooks/useProducts";
 import { Product } from "@/app/types/product";
 import { ProductTable } from "./components/product-table";
 import { ProductDrawer } from "./components/product-drawer";
+import { DeleteModal } from "@/components/delete-modal";
 
 export const ProductPage: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -115,28 +107,12 @@ export const ProductPage: React.FC = () => {
         isEdit={!!selectedProduct}
       />
 
-      <Modal
-        opened={openedModal}
-        onClose={closeModal}
-        title="Confirmar exclusão"
-      >
-        <Text>
-          Tem certeza que deseja excluir este produto? Esta ação não pode ser
-          desfeita.
-        </Text>
-        <Group mt="md">
-          <Button variant="outline" onClick={closeModal}>
-            Cancelar
-          </Button>
-          <Button
-            color="red"
-            onClick={handleDeleteProductConfirm}
-            disabled={!selectedProduct}
-          >
-            Excluir
-          </Button>
-        </Group>
-      </Modal>
+      <DeleteModal
+        openedModal={openedModal}
+        closeModal={closeModal}
+        handleClick={handleDeleteProductConfirm}
+        isDisabled={!selectedProduct}
+      />
     </Container>
   );
 };

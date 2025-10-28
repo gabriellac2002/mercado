@@ -1,21 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Container,
-  Title,
-  Button,
-  Group,
-  Stack,
-  Modal,
-  Text,
-  Loader,
-} from "@mantine/core";
+import { Container, Title, Button, Group, Stack, Loader } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
 import { UserTable, UserDrawer } from "./components";
 import { useUsers } from "@/hooks/useUsers";
 import { User } from "@/app/types/user";
+import { DeleteModal } from "@/components/delete-modal";
 
 type UserFormData = Pick<User, "name" | "email" | "role">;
 
@@ -116,28 +108,12 @@ export const UserPage: React.FC = () => {
         isEdit={!!selectedUser}
       />
 
-      <Modal
-        opened={openedModal}
-        onClose={closeModal}
-        title="Confirmar exclusão"
-      >
-        <Text>
-          Tem certeza que deseja excluir este usuário? Esta ação não pode ser
-          desfeita.
-        </Text>
-        <Group mt="md">
-          <Button variant="outline" onClick={closeModal}>
-            Cancelar
-          </Button>
-          <Button
-            color="red"
-            onClick={handleDeleteUserConfirm}
-            disabled={!selectedUser}
-          >
-            Excluir
-          </Button>
-        </Group>
-      </Modal>
+      <DeleteModal
+        openedModal={openedModal}
+        closeModal={closeModal}
+        handleClick={handleDeleteUserConfirm}
+        isDisabled={!selectedUser}
+      />
     </Container>
   );
 };
