@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Title, Button, Group, Loader } from "@mantine/core";
+import { Button, Loader } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconPlus } from "@tabler/icons-react";
+import { IconPlus, IconUser } from "@tabler/icons-react";
 import { UserTable, UserDrawer } from "./components";
 import { useUsers } from "@/hooks/useUsers";
 import { User } from "@/app/types/user";
 import { DeleteModal } from "@/components/delete-modal";
+import { PageLayout } from "../layout/page-layout";
 
 type UserFormData = Pick<User, "name" | "email" | "role">;
 
@@ -68,20 +69,23 @@ export const UserPage: React.FC = () => {
   }
 
   return (
-    <>
-      <Group justify="space-between" align="center">
-        <Title order={1}>Usuários</Title>
+    <PageLayout
+      title="Usuários"
+      icon={<IconUser size={24} />}
+      description={"Gerencie seus usuários"}
+      rightSection={
         <Button
           leftSection={<IconPlus size={16} />}
           onClick={() => {
             setSelectedUser(null);
             open();
           }}
+          mt="sm"
         >
           Adicionar Usuário
         </Button>
-      </Group>
-
+      }
+    >
       <UserTable
         users={users}
         onEdit={handleEdit}
@@ -112,7 +116,7 @@ export const UserPage: React.FC = () => {
         handleClick={handleDeleteUserConfirm}
         isDisabled={!selectedUser}
       />
-    </>
+    </PageLayout>
   );
 };
 

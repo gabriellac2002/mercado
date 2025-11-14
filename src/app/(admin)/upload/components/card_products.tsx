@@ -8,14 +8,17 @@ import { notifications } from "@mantine/notifications";
 
 type CardProductsProps = {
   importedProducts: ParseResult;
+  setLoading: (loading: boolean) => void;
   onReject: () => void;
 };
 
 export const CardProducts: React.FC<CardProductsProps> = ({
   importedProducts,
   onReject,
+  setLoading,
 }) => {
   async function onConfirm() {
+    setLoading(true);
     const result = await addProducts(importedProducts.products);
     if (result) {
       notifications.show({

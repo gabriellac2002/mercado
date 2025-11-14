@@ -33,10 +33,9 @@ export async function addProducts(products: Product[]): Promise<boolean> {
 
   try {
     console.log("Buscando produtos existentes no banco de dados...");
-    const q = query(productsRef, where("deleted", "==", null));
+    const q = query(productsRef, where("deleted", "==", false));
     const snapshot = await getDocs(q);
 
-    console.log(`Produtos encontrados: ${snapshot.size}`);
     const existingProducts = new Map<string, { id: string; data: Product }>();
     snapshot.docs.forEach((docSnap) => {
       const data = docSnap.data() as Product;
@@ -50,8 +49,12 @@ export async function addProducts(products: Product[]): Promise<boolean> {
     let batchOperations = 0;
 
     for (const product of products) {
+      console.log(`Processando produto: ${product.name}`);
       const productKey = product.name.toLowerCase().trim();
+      console.log(`Chave do produto: ${productKey}`);
       const existing = existingProducts.get(productKey);
+      console.log(`Produto existente: ${existing ? "Sim" : "Não"}`);
+      console.log(existingProducts);
 
       if (existing) {
         const newQuantity = existing.data.quantity + product.quantity;

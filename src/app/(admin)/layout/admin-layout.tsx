@@ -5,7 +5,6 @@ import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { useState } from "react";
 import { Navbar } from "@/components/navbar";
 import { Header } from "@/components/header";
-import { PageLayout } from "./page-layout";
 
 export const AdminLayout: React.FC<React.PropsWithChildren> = ({
   children,
@@ -30,9 +29,7 @@ export const AdminLayout: React.FC<React.PropsWithChildren> = ({
 
       <Navbar collapsed={collapsed} />
 
-      <AppShell.Main className="bg-gray-100">
-        <PageLayout>{children}</PageLayout>
-      </AppShell.Main>
+      <AppShell.Main className="bg-gray-100">{children}</AppShell.Main>
     </AppShell>
   );
 };

@@ -1,10 +1,12 @@
-import { Title } from "@mantine/core";
+import { PageLayout } from "../layout/page-layout";
 
 export const ShoppingPage: React.FC = () => {
   return (
-    <>
-      <Title order={1}>Compras</Title>
-    </>
+    <PageLayout
+      title="Compras"
+      icon={undefined}
+      description={undefined}
+    ></PageLayout>
   );
 };
 

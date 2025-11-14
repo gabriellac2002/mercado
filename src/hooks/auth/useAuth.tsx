@@ -36,7 +36,12 @@ export const useAuth = () => {
           password
         );
         const firebaseUser = userCredential.user;
-        const userDoc = await getUserFromFirebase(firebaseUser.uid);
+
+        if (!firebaseUser.email) {
+          throw new Error("Usuário sem email associado.");
+        }
+
+        const userDoc = await getUserFromFirebase(firebaseUser.email);
 
         if (!userDoc) {
           throw new Error("Usuário não encontrado no banco de dados.");
@@ -46,6 +51,7 @@ export const useAuth = () => {
         setLoading(false);
         router.push("/user");
       } catch (error) {
+        console.error("Erro ao fazer login:", error);
         if (error instanceof Error && "code" in error) {
           const code = (error as { code: string }).code;
           const message = getFirebaseAuthErrorMessage(code);
