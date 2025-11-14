@@ -3,16 +3,23 @@
 import type { User } from "@/app/types/user";
 import { adminDb } from "@/lib/firebase-admin";
 
-export async function getUserFromFirebase(uid: string): Promise<User | null> {
+export async function getUserFromFirebase(email: string): Promise<User | null> {
+  console.log("Buscando usuário do Firestore para email:", email);
   try {
-    const docRef = adminDb.collection("users").doc(uid);
-    const snapshot = await docRef.get();
+    const docRef = adminDb
+      .collection("users")
+      .where("email", "==", email)
+      .limit(1)
+      .get();
+    const snapshot = (await docRef).docs[0];
 
     if (!snapshot.exists) {
+      console.log("Usuário não encontrado no Firestore para email:", email);
       return null;
     }
 
     const data = snapshot.data();
+    console.log("Dados do usuário buscado:", data);
 
     return {
       id: snapshot.id,

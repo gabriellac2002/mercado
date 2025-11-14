@@ -52,7 +52,11 @@ export const UploadPage: React.FC = () => {
       {importedProducts ? (
         <CardProducts
           importedProducts={importedProducts}
-          onReject={() => setImportedProducts(null)}
+          setLoading={setLoading}
+          onReject={() => {
+            setImportedProducts(null);
+            setLoading(false);
+          }}
         />
       ) : (
         <Paper p="md" withBorder>
