@@ -22,7 +22,7 @@ export async function getCategories(): Promise<ApiResponse<Category[]>> {
 
     return {
       success: true,
-      data: data.products,
+      data: data,
     };
   } catch {
     return {
