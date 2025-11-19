@@ -2,22 +2,21 @@ import { useState, useEffect, useCallback } from "react";
 import { notifications } from "@mantine/notifications";
 import { Category } from "@/app/types/category";
 import { getCategories } from "@/lib/api/categories";
-import {
-  createCategoryAction,
-  deleteCategoryAction,
-  updateCategoryAction,
-} from "../actions/category-actions";
+import { useCrud } from "@/hooks/crud/useCrud";
+import { Collections } from "@/hooks/crud/types";
 
-export type CategoryFormData = Pick<Category, "name">;
+export type CategoryFormData = Pick<Category, "name" | "icon">;
 
 export const useCategories = () => {
+  const { createItem, updateItem, deleteItem, loading } = useCrud<Category>();
+
   const [categories, setCategories] = useState<Category[] | null>(null);
-  const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
 
   const loadCategories = useCallback(async () => {
     try {
       const result = await getCategories();
+      console.log("getCategories result:", result);
       if (result.success && result.data) {
         setCategories(result.data);
       }
@@ -39,98 +38,89 @@ export const useCategories = () => {
 
   const handleCreateCategory = useCallback(
     async (values: CategoryFormData): Promise<boolean> => {
-      setLoading(true);
-
-      try {
-        const result = await createCategoryAction({
+      const result = await createItem(
+        Collections.CATEGORIES,
+        {
           name: values.name,
-        });
+          icon: values.icon,
+        },
+        "Categoria criada com sucesso!"
+      );
 
-        if (result.success) {
-          notifications.show({
-            title: "Sucesso",
-            message: result.data?.message || "Categoria criada com sucesso!",
-            color: "green",
-          });
-          await loadCategories();
-          return true;
-        }
-
-        return false;
-      } catch (error) {
-        console.error("Erro ao criar categoria:", error);
+      if (result.success) {
         notifications.show({
-          title: "Erro",
-          message: "Erro inesperado ao criar categoria",
-          color: "red",
+          title: "Sucesso",
+          message: "Categoria criada com sucesso!",
+          color: "green",
         });
-        return false;
-      } finally {
-        setLoading(false);
+        await loadCategories();
+        return true;
       }
+
+      notifications.show({
+        title: "Erro",
+        message: result.error || "Erro ao criar categoria",
+        color: "red",
+      });
+      return false;
     },
-    [loadCategories]
+    [loadCategories, createItem]
   );
 
   const handleUpdateCategory = useCallback(
     async (categoryId: string, value: Category): Promise<boolean> => {
-      setLoading(true);
-      try {
-        const result = await updateCategoryAction(categoryId, value);
+      const result = await updateItem(
+        Collections.CATEGORIES,
+        categoryId,
+        value,
+        "Categoria atualizada com sucesso!"
+      );
 
-        if (result.success) {
-          notifications.show({
-            title: "Sucesso",
-            message: "Categoria atualizada com sucesso!",
-            color: "green",
-          });
-          await loadCategories();
-          return true;
-        }
-        return false;
-      } catch (error) {
-        console.error("Erro ao atualizar categoria:", error);
+      if (result.success) {
         notifications.show({
-          title: "Erro",
-          message: "Erro inesperado ao atualizar categoria",
-          color: "red",
+          title: "Sucesso",
+          message: "Categoria atualizada com sucesso!",
+          color: "green",
         });
-        return false;
-      } finally {
-        setLoading(false);
+        await loadCategories();
+        return true;
       }
+
+      notifications.show({
+        title: "Erro",
+        message: result.error || "Erro ao atualizar categoria",
+        color: "red",
+      });
+      return false;
     },
-    [loadCategories]
+    [loadCategories, updateItem]
   );
 
   const handleDeleteCategory = useCallback(
     async (categoryId: string): Promise<boolean> => {
-      setLoading(true);
-      try {
-        const result = await deleteCategoryAction(categoryId);
-        if (result.success) {
-          notifications.show({
-            title: "Sucesso",
-            message: "Categoria excluída com sucesso!",
-            color: "green",
-          });
-          await loadCategories();
-          return true;
-        }
-        return false;
-      } catch (error) {
-        console.error("Erro ao excluir categoria:", error);
+      const result = await deleteItem(
+        Collections.CATEGORIES,
+        categoryId,
+        "Categoria excluída com sucesso!"
+      );
+      if (result.success) {
         notifications.show({
-          title: "Erro",
-          message: "Erro inesperado ao excluir categoria",
-          color: "red",
+          title: "Sucesso",
+          message: "Categoria excluída com sucesso!",
+          color: "green",
         });
-        return false;
-      } finally {
-        setLoading(false);
+        await loadCategories();
+        return true;
       }
+
+      notifications.show({
+        title: "Erro",
+        message: result.error || "Erro ao excluir categoria",
+        color: "red",
+      });
+      return false;
     },
-    [loadCategories]
+    [loadCategories, deleteItem]
   );
 
   const refreshCategories = useCallback(() => {
@@ -138,17 +128,14 @@ export const useCategories = () => {
   }, [loadCategories]);
 
   return {
-    // Estados
     categories,
     loading,
     initialLoading,
 
-    // Funções de CRUD
     handleCreateCategory,
     handleUpdateCategory,
     handleDeleteCategory,
 
-    // Funções utilitárias
     loadCategories,
     refreshCategories,
   };

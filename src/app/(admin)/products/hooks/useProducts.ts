@@ -2,11 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { notifications } from "@mantine/notifications";
 import { Product } from "@/app/types/product";
 import { getProducts } from "@/lib/api/product";
-import {
-  createProductAction,
-  deleteProductAction,
-  updateProductAction,
-} from "../actions/products-actions";
+import { useCrud } from "@/hooks/crud/useCrud";
+import { Collections } from "@/hooks/crud/types";
 
 export type ProductFormData = Pick<
   Product,
@@ -14,8 +11,9 @@ export type ProductFormData = Pick<
 >;
 
 export const useProducts = () => {
+  const { createItem, updateItem, deleteItem, loading } = useCrud<Product>();
+
   const [products, setProducts] = useState<Product[] | null>(null);
-  const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
 
   const loadProducts = useCallback(async () => {
@@ -42,101 +40,91 @@ export const useProducts = () => {
 
   const handleCreateProduct = useCallback(
     async (values: ProductFormData): Promise<boolean> => {
-      setLoading(true);
-
-      try {
-        const result = await createProductAction({
+      const result = await createItem(
+        Collections.PRODUCTS,
+        {
           name: values.name,
           quantity: values.quantity,
           unitPrice: values.unitPrice,
           supplier: values.supplier,
-        });
+        },
+        "Produto criado com sucesso!"
+      );
 
-        if (result.success) {
-          notifications.show({
-            title: "Sucesso",
-            message: result.data?.message || "Usuário criado com sucesso!",
-            color: "green",
-          });
-          await loadProducts();
-          return true;
-        }
-
-        return false;
-      } catch (error) {
-        console.error("Erro ao criar usuário:", error);
+      if (result.success) {
         notifications.show({
-          title: "Erro",
-          message: "Erro inesperado ao criar usuário",
-          color: "red",
+          title: "Sucesso",
+          message: "Produto criado com sucesso!",
+          color: "green",
         });
-        return false;
-      } finally {
-        setLoading(false);
+        await loadProducts();
+        return true;
       }
+
+      notifications.show({
+        title: "Erro",
+        message: result.error || "Erro ao criar produto",
+        color: "red",
+      });
+      return false;
     },
-    [loadProducts]
+    [loadProducts, createItem]
   );
 
   const handleUpdateProduct = useCallback(
     async (productId: string, value: Product): Promise<boolean> => {
-      setLoading(true);
-      try {
-        const result = await updateProductAction(productId, value);
+      const result = await updateItem(
+        Collections.PRODUCTS,
+        productId,
+        value,
+        "Produto atualizado com sucesso!"
+      );
 
-        if (result.success) {
-          notifications.show({
-            title: "Sucesso",
-            message: "Produto atualizado com sucesso!",
-            color: "green",
-          });
-          await loadProducts();
-          return true;
-        }
-        return false;
-      } catch (error) {
-        console.error("Erro ao atualizar produto:", error);
+      if (result.success) {
         notifications.show({
-          title: "Erro",
-          message: "Erro inesperado ao atualizar produto",
-          color: "red",
+          title: "Sucesso",
+          message: "Produto atualizado com sucesso!",
+          color: "green",
         });
-        return false;
-      } finally {
-        setLoading(false);
+        await loadProducts();
+        return true;
       }
+
+      notifications.show({
+        title: "Erro",
+        message: result.error || "Erro ao atualizar produto",
+        color: "red",
+      });
+      return false;
     },
-    [loadProducts]
+    [loadProducts, updateItem]
   );
 
   const handleDeleteProduct = useCallback(
     async (productId: string): Promise<boolean> => {
-      setLoading(true);
-      try {
-        const result = await deleteProductAction(productId);
-        if (result.success) {
-          notifications.show({
-            title: "Sucesso",
-            message: "Produto excluído com sucesso!",
-            color: "green",
-          });
-          await loadProducts();
-          return true;
-        }
-        return false;
-      } catch (error) {
-        console.error("Erro ao excluir usuário:", error);
+      const result = await deleteItem(
+        Collections.PRODUCTS,
+        productId,
+        "Produto excluído com sucesso!"
+      );
+      if (result.success) {
         notifications.show({
-          title: "Erro",
-          message: "Erro inesperado ao excluir usuário",
-          color: "red",
+          title: "Sucesso",
+          message: "Produto excluído com sucesso!",
+          color: "green",
         });
-        return false;
-      } finally {
-        setLoading(false);
+        await loadProducts();
+        return true;
       }
+
+      notifications.show({
+        title: "Erro",
+        message: result.error || "Erro ao excluir produto",
+        color: "red",
+      });
+      return false;
     },
-    [loadProducts]
+    [loadProducts, deleteItem]
   );
 
   const refreshProducts = useCallback(() => {
@@ -144,17 +132,14 @@ export const useProducts = () => {
   }, [loadProducts]);
 
   return {
-    // Estados
     products,
     loading,
     initialLoading,
 
-    // Funções de CRUD
     handleCreateProduct,
     handleUpdateProduct,
     handleDeleteProduct,
 
-    // Funções utilitárias
     loadProducts,
     refreshProducts,
   };
