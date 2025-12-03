@@ -4,6 +4,8 @@ import { Product } from "@/app/types/product";
 import { getProducts } from "@/lib/api/product";
 import { useCrud } from "@/hooks/crud/useCrud";
 import { Collections } from "@/hooks/crud/types";
+import { Category } from "@/app/types/category";
+import { getCategories } from "@/lib/api/categories";
 
 export type ProductFormData = Pick<
   Product,
@@ -14,7 +16,24 @@ export const useProducts = () => {
   const { createItem, updateItem, deleteItem, loading } = useCrud<Product>();
 
   const [products, setProducts] = useState<Product[] | null>(null);
+  const [categories, setCategories] = useState<Category[] | null>(null);
   const [initialLoading, setInitialLoading] = useState(true);
+
+  const loadCategories = useCallback(async () => {
+    try {
+      const result = await getCategories();
+      if (result.success && result.data) {
+        setCategories(result.data);
+      }
+    } catch (error) {
+      console.error("Erro ao carregar categorias:", error);
+      notifications.show({
+        title: "Erro",
+        message: "Erro inesperado ao carregar categorias",
+        color: "red",
+      });
+    }
+  }, []);
 
   const loadProducts = useCallback(async () => {
     try {
@@ -36,7 +55,8 @@ export const useProducts = () => {
 
   useEffect(() => {
     loadProducts();
-  }, [loadProducts]);
+    loadCategories();
+  }, [loadProducts, loadCategories]);
 
   const handleCreateProduct = useCallback(
     async (values: ProductFormData): Promise<boolean> => {
@@ -133,6 +153,7 @@ export const useProducts = () => {
 
   return {
     products,
+    categories,
     loading,
     initialLoading,
 

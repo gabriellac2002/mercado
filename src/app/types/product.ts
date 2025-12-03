@@ -1,11 +1,9 @@
-import { Category } from "./category";
-
 export type Product = {
   id: string;
   name: string;
   quantity: number;
   unitPrice: number;
-  category?: Category | null;
+  categoryId?: string | null;
   supplier?: string | null;
   createdAt?: string | null;
   updatedAt?: string | null;

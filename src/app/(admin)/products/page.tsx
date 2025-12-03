@@ -17,6 +17,7 @@ export const ProductPage: React.FC = () => {
   const [openedModal, { open: openModal, close: closeModal }] =
     useDisclosure(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const {
     products,
@@ -24,6 +25,7 @@ export const ProductPage: React.FC = () => {
     handleCreateProduct,
     handleDeleteProduct,
     handleUpdateProduct,
+    categories,
   } = useProducts();
 
   const handleAdd = async (values: ProductFormData) => {
@@ -60,7 +62,7 @@ export const ProductPage: React.FC = () => {
     }
   };
 
-  if (loading || !products) {
+  if (!products || !categories) {
     return (
       <div className="flex items-center justify-center h-screen">
         <Loader />
@@ -80,6 +82,7 @@ export const ProductPage: React.FC = () => {
             setSelectedProduct(null);
             open();
           }}
+          loading={loading}
           mt="sm"
         >
           Adicionar Produto
@@ -88,6 +91,9 @@ export const ProductPage: React.FC = () => {
     >
       <ProductTable
         products={products}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+        categories={categories || []}
         onEdit={handleEdit}
         onDelete={(productId: string) => {
           const product = products.find((p) => p.id === productId);
