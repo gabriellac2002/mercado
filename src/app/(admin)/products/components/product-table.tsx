@@ -18,15 +18,23 @@ import {
 import { useMediaQuery } from "@mantine/hooks";
 import { IconEdit, IconTrash, IconSearch } from "@tabler/icons-react";
 import { useState, useMemo, useEffect } from "react";
+import { CategoryTag } from "./category-tag";
+import { Category } from "@/app/types/category";
 
 interface ProductTableProps {
   products: Product[];
+  currentPage: number;
+  onPageChange: (page: number) => void;
+  categories: Category[];
   onEdit: (product: Product) => void;
   onDelete: (productId: string) => void;
 }
 
 export const ProductTable: React.FC<ProductTableProps> = ({
   products,
+  currentPage,
+  onPageChange,
+  categories,
   onEdit,
   onDelete,
 }) => {
@@ -34,7 +42,6 @@ export const ProductTable: React.FC<ProductTableProps> = ({
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const filteredProducts = useMemo(() => {
@@ -54,8 +61,8 @@ export const ProductTable: React.FC<ProductTableProps> = ({
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
   useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, itemsPerPage]);
+    onPageChange(1);
+  }, [searchTerm, itemsPerPage, onPageChange]);
 
   if (products.length === 0) {
     return (
@@ -72,6 +79,9 @@ export const ProductTable: React.FC<ProductTableProps> = ({
         <NumberFormatter prefix="R$" value={p.unitPrice} thousandSeparator />
       </Table.Td>
       <Table.Td>{p.quantity}</Table.Td>
+      <Table.Td>
+        <CategoryTag categoryId={p.categoryId} categories={categories} />
+      </Table.Td>
       {!isMobile && (
         <Table.Td>
           <Group gap="xs">
@@ -150,6 +160,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
                 <Table.Th>Nome</Table.Th>
                 <Table.Th>Preço Unitário</Table.Th>
                 <Table.Th>Quantidade</Table.Th>
+                <Table.Th>Categoria</Table.Th>
                 {!isMobile && <Table.Th>Ações</Table.Th>}
               </Table.Tr>
             </Table.Thead>
@@ -164,7 +175,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
             <Pagination
               total={totalPages}
               value={currentPage}
-              onChange={setCurrentPage}
+              onChange={onPageChange}
               size={isMobile ? "sm" : "md"}
             />
           </Flex>

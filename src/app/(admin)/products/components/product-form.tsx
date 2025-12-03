@@ -1,10 +1,18 @@
 "use client";
 
 import { Product } from "@/app/types/product";
-import { Button, TextInput, Stack, Group, NumberInput } from "@mantine/core";
+import {
+  Button,
+  TextInput,
+  Stack,
+  Group,
+  NumberInput,
+  Select,
+} from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconDeviceFloppy, IconX } from "@tabler/icons-react";
+import { useProducts } from "../hooks/useProducts";
 
 interface ProductFormProps {
   onSubmit: (data: Product) => void;
@@ -28,6 +36,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       unitPrice: initialData?.unitPrice || 0,
       quantity: initialData?.quantity || 0,
       supplier: initialData?.supplier || "",
+      categoryId: initialData?.categoryId || null,
     },
     validate: {
       name: isNotEmpty("Nome é obrigatório"),
@@ -35,6 +44,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       quantity: isNotEmpty("Quantidade é obrigatória"),
     },
   });
+
+  const { categories } = useProducts();
+
+  const categoryOptions = categories
+    ? categories.map((category) => ({
+        value: category.id,
+        label: category.name,
+      }))
+    : [];
 
   const handleSubmit = (values: Product) => {
     try {
@@ -80,6 +98,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           label="Fornecedor"
           placeholder="Digite o fornecedor do produto"
           {...form.getInputProps("supplier")}
+        />
+
+        <Select
+          label="Categoria"
+          placeholder="Selecione a categoria do produto"
+          data={categoryOptions}
+          {...form.getInputProps("categoryId")}
         />
 
         <Group gap="sm" mt="auto" justify="flex-end">
