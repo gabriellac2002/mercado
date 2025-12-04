@@ -1,5 +1,3 @@
-"use client";
-
 import { Drawer } from "@mantine/core";
 import { Product } from "@/app/types/product";
 import { ProductForm } from "./product-form";
