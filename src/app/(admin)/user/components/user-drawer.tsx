@@ -1,5 +1,3 @@
-"use client";
-
 import { Drawer } from "@mantine/core";
 import { UserForm } from "./user-form";
 import { User } from "@/app/types/user";

@@ -10,6 +10,11 @@ export interface SidebarRoute {
 
 export const sidebarRoutes: SidebarRoute[] = [
   {
+    path: "/shopping",
+    name: "Compras",
+    icon: FaShoppingCart,
+  },
+  {
     path: "/user",
     name: "Usuarios",
     icon: FaUsers,

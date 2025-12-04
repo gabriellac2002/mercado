@@ -4,30 +4,32 @@ import { getDocs, collection, query, orderBy, where } from "firebase/firestore";
 
 export async function GET() {
   try {
-    const productsQuery = query(
-      collection(db, "products"),
+    const shoppingQuery = query(
+      collection(db, "shopping"),
       where("deleted", "!=", true),
       orderBy("createdAt", "desc")
     );
-    const querySnapshot = await getDocs(productsQuery);
+    const querySnapshot = await getDocs(shoppingQuery);
 
-    const products = querySnapshot.docs.map((doc) => {
+    const shopping = querySnapshot.docs.map((doc) => {
       const data = doc.data();
       return {
         id: doc.id,
         ...data,
-        quantity: Number(data.quantity) || 0,
-        unitPrice: Number(data.unitPrice) || 0,
+        totalAmount: Number(data.totalAmount) || 0,
         createdAt: data.createdAt?.toDate().toISOString(),
         updatedAt: data.updatedAt?.toDate().toISOString(),
+        completedAt: data.completedAt?.toDate().toISOString(),
+        paidAt: data.paidAt?.toDate().toISOString(),
+        deletedAt: data.deletedAt?.toDate().toISOString(),
       };
     });
 
-    return NextResponse.json({ products }, { status: 200 });
+    return NextResponse.json({ shopping }, { status: 200 });
   } catch (error) {
-    console.error("Erro ao buscar produtos:", error);
+    console.error("Erro ao buscar compras:", error);
     return NextResponse.json(
-      { error: "Erro ao buscar usuários" },
+      { error: "Erro ao buscar compras" },
       { status: 500 }
     );
   }

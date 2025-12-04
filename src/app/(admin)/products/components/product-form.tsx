@@ -1,5 +1,3 @@
-"use client";
-
 import { Product } from "@/app/types/product";
 import {
   Button,

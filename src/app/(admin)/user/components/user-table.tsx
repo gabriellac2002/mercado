@@ -1,5 +1,3 @@
-"use client";
-
 import { User } from "@/app/types/user";
 import {
   Table,

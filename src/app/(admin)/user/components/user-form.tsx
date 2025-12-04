@@ -1,5 +1,3 @@
-"use client";
-
 import { Button, TextInput, Select, Stack, Group } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";

@@ -14,7 +14,7 @@ const LoginView: React.FC = () => {
 
   useEffect(() => {
     if (!initializing && user) {
-      router.push("/user");
+      router.push("/shopping");
     }
   }, [initializing, user, router]);
 
